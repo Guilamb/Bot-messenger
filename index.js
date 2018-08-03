@@ -12,6 +12,7 @@ app.get('/', function (req, res) {
 res.send('Hello world, je suis un chat bot'); 
 });
 // for Facebook verification
+const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 app.get('/webhook/', function (req, res) {
 if (req.query['hub.verify_token'] === '202224') {res.send(req.query['hub.challenge']) ;}
 res.send('erreur, mauvais token') ;}) ;
