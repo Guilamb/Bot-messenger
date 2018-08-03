@@ -13,7 +13,7 @@ res.send('Hello world, je suis un chat bot');
 });
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-if (req.query['hub.verify_token'] === 'password_facile_a_retenir') {res.send(req.query['hub.challenge']) ;}
+if (req.query['hub.verify_token'] === '202224') {res.send(req.query['hub.challenge']) ;}
 res.send('erreur, mauvais token') ;}) ;
 // Spin up the server
 app.listen(app.get('port'), function() {
