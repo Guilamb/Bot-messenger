@@ -14,7 +14,7 @@ res.send('Hello world, je suis un chat bot');
 // for Facebook verification
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 app.get('/webhook/', function (req, res) {
-	const VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
+	const VERIFY_TOKEN = "<EAAVX3oiaB0QBALDB2uGwOUc0qCQGpHOtGSjNndloXWc3j1iGa97EtYUAU7tuSO2qaX5bV9wXxZBuQNuQXBZCw0Hhy4rZAf3TtuNPwcxavpXeMFNpZCJnfrY5UZAIudqdglA67NPeQJKam9WH6OudIcCYH9AAml4GZBjwhj9LMDMwZDZD>";
 if (req.query['hub.verify_token'] === '202224') {res.send(req.query['hub.challenge']) ;}
 res.send('erreur, mauvais token') ;}) ;
 // Spin up the server
