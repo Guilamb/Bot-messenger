@@ -1,6 +1,7 @@
 var express = require('express') ;
 var bodyParser = require('body-parser') ;
 var request = require('request') ;
+const http = require('http'),
 var app = express() ;
 app.set('port', (process.env.PORT || 5000)) ;
 // Process application/x-www-form-urlencoded
@@ -8,6 +9,7 @@ app.use(bodyParser.urlencoded({extended: false})) ;
 // Process application/json
 app.use(bodyParser.json()) ;
 // for Facebook verification
+const VALIDATION_TOKEN = "mdp";
 app.get('/webhook', function(req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === VALIDATION_TOKEN) {
