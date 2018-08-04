@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({extended: false})) ;
 app.use(bodyParser.json()) ;
 // Index route
 app.get('/', function (req, res) {
-res.send('Hello world, je suis un chat bot'); 
+res.send("Hello world, je suis un chat bot"); 
 });
 // for Facebook verification
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
