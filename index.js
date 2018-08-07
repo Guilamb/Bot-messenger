@@ -37,7 +37,7 @@ app.post('/webhook/', function (req, res) {
 //receive message
 function sendTextMessage(sender, text) {
     let data = { text:text }
-    let access_token = "mEAAVX3oiaB0QBAJ0ckwF9XRy50Os5LNBu5DqMt8VwmQbtZCFlqzAubfjU3tBaebZATcWNPSktuplrfHD2OrTpx5sozZCbB0CaesZCMVqP55dgNPCRsMKGNV7psWZB3IlgyyXNMHHIjzQqYlKyttsR9YnL5W0fROuRWqa48V8kWrgZDZD";
+    let access_token = "EAAVX3oiaB0QBACIdVBB1pc7PTNnQvYO8ZBs6Bc9ITkvnSAqL0ZBIvpHhHsWC9UYz4JIpGz7mCSgRhAjraRA9VtTUjLTLhQka7ZCUka4qCyedpeZABDTd5W9Bp4Tl3savSZARiaQIcNGCGkcd8wdMJ7dTJX2dwwUZCr9wrSj92L3QZDZD";
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: access_token},
