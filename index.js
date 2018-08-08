@@ -22,35 +22,36 @@ res.send('erreur, mauvais token') ;
 app.listen(app.get('port'), function() {
 console.log('running on port', app.get('port')) ;
 }) ;
-//facebook latence
+//entry of the server
+var token =<EAAVX3oiaB0QBAMl2hyPhIB43mnwJAb6sZCO96OZCHyIEYTSVltLc3iGVTs46KTXk92RJnF6tC75vSBZCa3uMZBDMrU2ziizPepcOWbSpOVIPJbjJ1kZAHJIbNhVAQ6JOvntM8QkGEgvfK9TrtRbJ76zZACOD6YnXmNQ51InpAyjQZDZD> ;
 app.post('/webhook/', function (req, res) {
-    let message_events = req.body.entry[0].messaging
-    for (message_event of message_events) {
-        let sender = message_event.sender.id
-        if (message_event.message && message_event.message.text) {
-            let text = message_event.message.text
-            sendTextMessage(sender, "J'ai recu : " + text.substring(0, 200))
-        }
-    }
-    res.sendStatus(200)
+var messaging_events = req.body.entry[0].messaging ;
+for (var i = 0; i < messaging_events.length; i++) {
+var event = req.body.entry[0].messaging[i] ;
+var sender = event.sender.id
+if (event.message && event.message.text) {
+var text = event.message.text ;
+sendTextMessage(sender, "Message reçu : " + text.substring(0, 200)) ;
+}
+}
+res.sendStatus(200) ;
 })
-//receive message
+//sent message
 function sendTextMessage(sender, text) {
-    let data = { text:text }
-    let access_token = "EAAVX3oiaB0QBACIdVBB1pc7PTNnQvYO8ZBs6Bc9ITkvnSAqL0ZBIvpHhHsWC9UYz4JIpGz7mCSgRhAjraRA9VtTUjLTLhQka7ZCUka4qCyedpeZABDTd5W9Bp4Tl3savSZARiaQIcNGCGkcd8wdMJ7dTJX2dwwUZCr9wrSj92L3QZDZD";
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: access_token},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: data,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
+var messageText = { text:text } ;
+request({
+url: 'https://graph.facebook.com/v2.6/me/messages',
+qs: {access_token:token},
+method: 'POST',
+json: {
+recipient: {id:sender},
+message: messageText,
+}
+}, function(error, response, body) {
+if (error) {
+console.log('Une erreur est survenue : ', error) ;
+} else if (response.body.error) {
+console.log('Erreur: ', response.body.error) ;
+}
+}) ;
 }
