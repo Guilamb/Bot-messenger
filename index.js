@@ -23,7 +23,7 @@ app.listen(app.get('port'), function() {
 console.log('running on port', app.get('port')) ;
 }) ;
 //entry of the server
-var token =<EAAVX3oiaB0QBAMl2hyPhIB43mnwJAb6sZCO96OZCHyIEYTSVltLc3iGVTs46KTXk92RJnF6tC75vSBZCa3uMZBDMrU2ziizPepcOWbSpOVIPJbjJ1kZAHJIbNhVAQ6JOvntM8QkGEgvfK9TrtRbJ76zZACOD6YnXmNQ51InpAyjQZDZD> ;
+var token =<EAAVX3oiaB0QBAMl2hyPhIB43mnwJAb6sZCO96OZCHyIEYTSVltLc3iGVTs46KTXk92RJnF6tC75vSBZCa3uMZBDMrU2ziizPepcOWbSpOVIPJbjJ1kZAHJIbNhVAQ6JOvntM8QkGEgvfK9TrtRbJ76zZACOD6YnXmNQ51InpAyjQZDZD>";
 app.post('/webhook/', function (req, res) {
 var messaging_events = req.body.entry[0].messaging ;
 for (var i = 0; i < messaging_events.length; i++) {
@@ -45,8 +45,9 @@ qs: {access_token:token},
 method: 'POST',
 json: {
 recipient: {id:sender},
-message: {messageText}}, 
-function(error, response, body) {
+message: messageText,
+	}
+},function(error, response, body) {
 if (error) {
 console.log('Une erreur est survenue : ', error) ;
 } else if (response.body.error) {
