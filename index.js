@@ -45,7 +45,7 @@ qs: {access_token:token},
 method: 'POST',
 json: {
 recipient: {id:sender},
-message: {messageText}, 
+message: {messageText}}, 
 function(error, response, body) {
 if (error) {
 console.log('Une erreur est survenue : ', error) ;
