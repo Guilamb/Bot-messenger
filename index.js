@@ -1,58 +1,128 @@
-var express = require('express') ;
-var bodyParser = require('body-parser') ;
-var request = require('request') ;
-var app = express() ;
-app.set('port', (process.env.PORT || 5000)) ;
+'use strict'
+
+var express = require('express')
+var bodyParser = require('body-parser')
+var request = require('request')
+var app = express()
+
+app.set('port', (process.env.PORT || 5000))
+
 // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false})) ;
+app.use(bodyParser.urlencoded({extended: false}))
+
 // Process application/json
-app.use(bodyParser.json()) ;
+app.use(bodyParser.json())
+
 // Index route
 app.get('/', function (req, res) {
-res.send(req.query['hub.challenge']) ;
-}) ;
-// for Facebook verification
+	res.send('Hello world, je suis un chat bot')
+})
+
+// Facebook verification
 app.get('/webhook/', function (req, res) {
-if (req.query['hub.verify_token'] === 'password_facile_a_retenir') {
-res.send(req.query['hub.challenge']) ;
-}
-res.send('erreur, mauvais token') ;
-}) ;
+	if (req.query['hub.verify_token'] === 'password_facile_a_retenir') {
+		res.send(req.query['hub.challenge'])
+	}
+	res.send('Erreur, mauvais token')
+})
+
 // Spin up the server
 app.listen(app.get('port'), function() {
-console.log('running on port', app.get('port')) ;
-}) ;
-//entry of the server
-var token = <"EAAVX3oiaB0QBAMl2hyPhIB43mnwJAb6sZCO96OZCHyIEYTSVltLc3iGVTs46KTXk92RJnF6tC75vSBZCa3uMZBDMrU2ziizPepcOWbSpOVIPJbjJ1kZAHJIbNhVAQ6JOvntM8QkGEgvfK9TrtRbJ76zZACOD6YnXmNQ51InpAyjQZDZD">;
-app.post('/webhook/', function (req, res) {
-var messaging_events = req.body.entry[0].messaging ;
-for (var i = 0; i < messaging_events.length; i++) {
-var event = req.body.entry[0].messaging[i] ;
-var sender = event.sender.id
-if (event.message && event.message.text) {
-var text = event.message.text ;
-sendTextMessage(sender, "Message reçu : " + text.substring(0, 200)) ;
-}
-}
-res.sendStatus(200) ;
+	console.log('running on port', app.get('port'))
 })
-//sent message
-function sendTextMessage(sender, text) {
-var messageText = { text:text } ;
-request({
-url: 'https://graph.facebook.com/v2.6/me/messages',
-qs: {access_token:token},
-method: 'POST',
-json: {
-recipient: {id:sender},
-message: messageText,
+
+app.post('/webhook/', function (req, res) {
+var messaging_events = req.body.entry[0].messaging
+for (var i = 0; i < messaging_events.length; i++) {
+	var event = req.body.entry[0].messaging[i]
+	var sender = event.sender.id
+	if (event.message && event.message.text) {
+		var text = event.message.text
+            if (text === 'Cards') {
+                sendCardMessage(sender)
+	            continue
+	        }
+			sendTextMessage(sender, "Message reçu : " + text.substring(0, 200))		
+		}		
+		if (event.postback) {
+			var text = JSON.stringify(event.postback)
+			sendTextMessage(sender, "Postback reçu : "+text.substring(0, 200), token)
+			continue
+      }
+		
 	}
-},function(error, response, body) {
-if (error) {
-console.log('Une erreur est survenue : ', error) ;
-} else if (response.body.error) {
-console.log('Erreur: ', response.body.error) ;
-}
-}) ;
+	
+		
+	res.sendStatus(200)
+})
+
+var token = "EAAVX3oiaB0QBAAZCMWjNT4f49SlIcZAfZCLDgiLuR0htknrG9g1Ov7V1bZB71RU0DCFDdfkZC6umJug5PrCGZBPieKOxagQhZCLYMuJqT6KuIYPqKbi0qMM8HfRXdpR6DshsLGGZAchp8bDs2Q3NxLSLJWnbMYsglrj5YNXFgKlZBFIlUUQNSepY5EAAVX3oiaB0QBAAZCMWjNT4f49SlIcZAfZCLDgiLuR0htknrG9g1Ov7V1bZB71RU0DCFDdfkZC6umJug5PrCGZBPieKOxagQhZCLYMuJqT6KuIYPqKbi0qMM8HfRXdpR6DshsLGGZAchp8bDs2Q3NxLSLJWnbMYsglrj5YNXFgKlZBFIlUUQNSepY5";
+
+function sendTextMessage(sender, text) {
+    var messageText = { text:text }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageText,
+	        }
+	    }, function(error, response, body) {
+	        if (error) {
+	            console.log('Une erreur est survenue : ', error)
+	        } else if (response.body.error) {
+	            console.log('Erreur: ', response.body.error)
+	        }
+	    })
 }
 
+
+function sendCardMessage(sender) {
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Premiere carte",
+                    "subtitle": "Element 1 de la liste",
+	                   // "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+	                    "buttons": [{
+	                        "type": "web_url",
+	                        "url": "https://www.messenger.com",
+	                        "title": "Visiter le site"
+	                    }, {
+	                        "type": "postback",
+	                        "title": "Acheter",
+	                        "payload": "Clic sur la premiere carte",
+	                    }],
+	                }, {
+	                    "title": "Deuxieme carte",
+	                    "subtitle": "Element numero 2 de la liste",
+	                   // "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+	                    "buttons": [{
+	                        "type": "postback",
+	                        "title": "Acheter",
+	                        "payload": "Clic sur la deuxieme carte",
+	                    }],
+	                }]
+	            }
+	        }
+	    }
+	    request({
+	        url: 'https://graph.facebook.com/v2.6/me/messages',
+	        qs: {access_token:token},
+	        method: 'POST',
+	        json: {
+	            recipient: {id:sender},
+	            message: messageData,
+	        }
+	    }, function(error, response, body) {
+	        if (error) {
+	            console.log('Erreur pendant l\'envoi du message ', error)
+	        } else if (response.body.error) {
+	            console.log('Erreur: ', response.body.error)
+	        }
+	    })
+}
