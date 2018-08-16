@@ -40,7 +40,7 @@ res.sendStatus(200) ;
 function sendTextMessage(sender, text) {
 var messageText = { text:text } ;
 request({
-url: 'https://graph.facebook.com/v3.1/me/messages',
+url: 'https://facebook.botframework.com/api/v1/bots/Boty',
 qs: {access_token:token},
 method: 'POST',
 json: {
